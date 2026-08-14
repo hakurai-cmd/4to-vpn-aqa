@@ -1,0 +1,13 @@
+__pycache__/
+.pytest_cache/
+.env
+venv/
+.venv/
+.coverage
+htmlcov/
+allure-results/
+allure-report/
+4to-vpn.xyz.html
+4to-vpn.xyz_files/
+miniappTG.html
+miniappTG_files/

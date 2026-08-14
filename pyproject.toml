@@ -1,0 +1,28 @@
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+# E/W - pycodestyle, F - pyflakes (баги), I - сортировка импортов,
+# UP - современный синтаксис, N - pep8-имена.
+select = ["E", "W", "F", "I", "UP", "N"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = false
+disallow_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+explicit_package_bases = true
+mypy_path = "."
+files = ["config.py", "conftest.py", "pages", "tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["pages", "config"]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = ["if __name__ == .__main__.:"]
