@@ -87,6 +87,28 @@ jobs:
           name: allure-results-backend
           path: allure-results/
 
+  security:
+    # Security-проверки: security-заголовки лендинга/Mini App + брутфорс-защита
+    # /api/auth. Найденные дефекты помечены xfail — CI остаётся зелёным, но
+    # находки документированы в отчёте и станут xpass, когда владелец починит.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - name: Run security tests
+        run: pytest -m security
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-security
+          path: allure-results/
+
   ui:
     runs-on: ubuntu-latest
     # UI-тесты лендинга + Mini App в одном браузерном job. ubuntu-latest содержит
@@ -109,18 +131,20 @@ jobs:
           path: allure-results/
 
   report:
-    # Собираем единый Allure-отчёт из API, backend и UI и публикуем в GitHub Pages.
-    # if: always() — отчёт нужен даже при падениях (ради него и пишем).
-    needs: [api, backend, ui]
+    # Собираем единый Allure-отчёт и публикуем через ОФИЦИАЛЬНЫЙ Pages-пайплайн
+    # (actions/deploy-pages), совместимый с Settings → Pages → Source: GitHub Actions.
+    # if: always() — отчёт нужен даже при падениях тестов (ради него и пишем).
+    needs: [api, backend, security, ui]
     if: always()
     runs-on: ubuntu-latest
     permissions:
-      contents: write # для деплоя в ветку gh-pages
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
       - name: Install Allure CLI
         run: |
           curl -sL https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.zip -o /tmp/allure.zip
@@ -134,16 +158,16 @@ jobs:
           merge-multiple: true
       - name: Generate Allure report
         run: allure generate allure-results -o _site --clean
-      - name: Deploy to GitHub Pages
-        # continue-on-error: деплой требует, чтобы владелец включил
-        # Settings → Pages → Source: GitHub Actions. Пока не включено — шаг
-        # падает, но НЕ красит бейдж: статус пайплайна отражает тесты, а не Pages.
-        continue-on-error: true
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          destination_dir: allure-report
+          path: ./_site
+      - name: Deploy to GitHub Pages
+        id: deploy
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
 
   docker-build:
     # Проверяем, что Dockerfile действительно собирается — портативность

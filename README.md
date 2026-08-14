@@ -17,7 +17,7 @@
 ![docker](https://img.shields.io/badge/docker-ready-2496ED?logo=docker&logoColor=white)
 
 [![tests](https://github.com/hakurai-cmd/4to-vpn-aqa/actions/workflows/tests.yml/badge.svg)](https://github.com/hakurai-cmd/4to-vpn-aqa/actions/workflows/tests.yml)
-[![allure report](https://img.shields.io/badge/allure-live_report-E0623F)](https://hakurai-cmd.github.io/4to-vpn-aqa/allure-report/)
+[![allure report](https://img.shields.io/badge/allure-live_report-E0623F)](https://hakurai-cmd.github.io/4to-vpn-aqa/)
 
 ## Стек
 
@@ -118,11 +118,12 @@ cp .env.example .env   # при необходимости вписать PROXY_
 # Все тесты
 pytest
 
-# Только API лендинга / backend / UI лендинга / Mini App
+# Только API лендинга / backend / UI лендинга / Mini App / security
 pytest -m api
 pytest -m backend
 pytest -m ui
 pytest -m miniapp
+pytest -m security
 
 # С покрытием
 pytest --cov --cov-report=term-missing
@@ -173,10 +174,12 @@ flowchart LR
   push --> lint[ruff + mypy]
   push --> api[pytest -m api]
   push --> backend[pytest -m backend]
-  push --> ui[pytest -m ui, headless]
+  push --> security[pytest -m security]
+  push --> ui[pytest -m ui+miniapp, headless]
   lint --> dock[docker build]
   api --> report[Allure generate]
   backend --> report
+  security --> report
   ui --> report
   report --> pages((GitHub Pages))
 ```
@@ -186,8 +189,9 @@ flowchart LR
 | `lint` | `ruff check`, `ruff format --check`, `mypy` — чистота кода |
 | `api` | HTTP-тесты лендинга, артефакт `allure-results-api` |
 | `backend` | Backend API (6 ручек), API discovery из Mini App, артефакт `allure-results-backend` |
+| `security` | Security-заголовки + rate-limit; найденные дефекты помечены `xfail` (зелёный CI, документация в Allure) |
 | `ui` | E2E на headless Firefox (браузер из образа runner'а), артефакт `allure-results-ui` |
-| `report` | Сливает артефакты, генерирует единый Allure-отчёт, деплоит в GH Pages → `https://<owner>.github.io/<repo>/allure-report/` |
+| `report` | Сливает артефакты, генерирует единый Allure-отчёт, деплоит в GH Pages (официальный `deploy-pages`) → `https://<owner>.github.io/<repo>/` |
 | `docker-build` | Проверяет сборку `Dockerfile` — портативность подтверждена на CI, а не «у меня работает» |
 
 > Для деплоя Allure в GH Pages на репозитории нужно включить **Settings → Pages →
@@ -197,13 +201,15 @@ flowchart LR
 ## Roadmap
 
 - [x] API-фундамент (requests, pytest, конфиг, параметризованные проверки)
-- [x] UI-слой (Selenium, Page Object, мобильный вьюпорт)
+- [x] UI-слой лендинга (Selenium, Page Object, мобильный вьюпорт)
+- [x] Telegram Mini App UI (10 E2E, mobile SPA)
+- [x] Backend API: типизированный клиент + pydantic-схемы (API discovery из Mini App)
+- [x] Unit-тесты клиента с моками (`responses`) — тест-пирамида
+- [x] Security-тесты: security-заголовки + брутфорс-защита (найденные дефекты — `xfail`)
 - [x] Allure (шаги, severity, скриншоты, HTTP-лог, env-виджет)
 - [x] Линт/типы (ruff, mypy, pre-commit)
-- [x] CI/CD: GitHub Actions (lint→api→ui→report в GH Pages) + Docker
-- [x] Backend API: типизированный клиент + pydantic-схемы (API discovery через Mini App)
-- [ ] Telegram Mini App: Chrome mobile emulation
-- [ ] Backend happy-path: требуется валидный `TELEGRAM_INIT_DATA`
+- [x] CI/CD: GitHub Actions + Docker (Allure в GitHub Pages, live-бейджи)
+- [ ] Backend happy-path: реальная бизнес-логика по валидному `TELEGRAM_INIT_DATA`
 
 ## Лицензия
 
