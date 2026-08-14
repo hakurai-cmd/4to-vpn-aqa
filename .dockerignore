@@ -1,0 +1,12 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+allure-results/
+allure-report/
+.env
+.git/
+.github/
+4to-vpn.xyz.html
