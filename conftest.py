@@ -10,6 +10,20 @@ from allure_commons.types import AttachmentType
 
 from config import config
 
+# Прокси-окружение нормализуем сами: явный PROXY_URL из .env прокидывается в
+# requests.Session (api_client) вручную, а env-переменные http_proxy/https_proxy
+# мешают — Selenium'у они не нужны, а snap-Firefox на старте пытается стучаться
+# в прокси и висит ~60с. Снимаем их с окружения тест-процесса целиком.
+for _v in (
+    "http_proxy",
+    "https_proxy",
+    "all_proxy",
+    "HTTP_PROXY",
+    "HTTPS_PROXY",
+    "ALL_PROXY",
+):
+    os.environ.pop(_v, None)
+
 MAX_BODY_LEN = 2000
 
 

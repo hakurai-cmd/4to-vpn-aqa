@@ -135,6 +135,10 @@ jobs:
       - name: Generate Allure report
         run: allure generate allure-results -o _site --clean
       - name: Deploy to GitHub Pages
+        # continue-on-error: деплой требует, чтобы владелец включил
+        # Settings → Pages → Source: GitHub Actions. Пока не включено — шаг
+        # падает, но НЕ красит бейдж: статус пайплайна отражает тесты, а не Pages.
+        continue-on-error: true
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

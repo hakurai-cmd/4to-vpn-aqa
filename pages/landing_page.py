@@ -42,6 +42,10 @@ class LandingPage(BasePage):
     def get_hero_cta_text(self) -> str:
         return self.text_of(self.HERO_CTA)
 
+    def get_hero_cta_href(self) -> str:
+        """href hero-CTA — локаль-нейтральный признак (всегда ведёт на /cp/register)."""
+        return self.find(self.HERO_CTA).get_attribute("href") or ""
+
     def is_telegram_link_visible(self) -> bool:
         return self.is_visible(self.TELEGRAM_LINK)
 
