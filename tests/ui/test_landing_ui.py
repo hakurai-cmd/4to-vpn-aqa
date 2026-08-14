@@ -58,9 +58,7 @@ class TestLandingUI:
         with allure.step("Открытие лендинга"):
             page.open()
 
-        with allure.step(
-            "Поиск hero-CTA (первая /cp/register-ссылка после H1) и проверка href"
-        ):
+        with allure.step("Поиск hero-CTA (первая /cp/register-ссылка после H1) и проверка href"):
             # Текст CTA зависит от локали ('Connect for free' / 'Подключиться бесплатно'),
             # поэтому проверяем локаль-нейтральный признак — href на /cp/register.
             cta_href = page.get_hero_cta_href()
