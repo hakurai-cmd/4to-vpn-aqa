@@ -16,8 +16,8 @@
 ![allure](https://img.shields.io/badge/reports-allure-E0623F)
 ![docker](https://img.shields.io/badge/docker-ready-2496ED?logo=docker&logoColor=white)
 
-[![tests](https://github.com/<OWNER>/<REPO>/actions/workflows/tests.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/tests.yml)
-[![allure report](https://img.shields.io/badge/allure-live_report-E0623F)](https://<OWNER>.github.io/<REPO>/allure-report/)
+[![tests](https://github.com/hakurai-cmd/4to-vpn-aqa/actions/workflows/tests.yml/badge.svg)](https://github.com/hakurai-cmd/4to-vpn-aqa/actions/workflows/tests.yml)
+[![allure report](https://img.shields.io/badge/allure-live_report-E0623F)](https://hakurai-cmd.github.io/4to-vpn-aqa/allure-report/)
 
 ## Стек
 
