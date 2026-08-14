@@ -1,0 +1,11 @@
+POST https://sub.4t0-t0.xyz/api/invoice
+Status: 403 | 0.125s
+
+--- REQUEST ---
+POST https://sub.4t0-t0.xyz/api/invoice
+Headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', 'Accept-Encoding': 'gzip, deflate', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '81'}
+Body: {"uid": "test-user-123", "plan": "12month", "initData": "invalid_test_init_data"}
+
+--- RESPONSE ---
+Headers: {'Server': 'nginx/1.24.0 (Ubuntu)', 'Date': 'Fri, 14 Aug 2026 11:41:25 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type'}
+Body: {"ok": false, "error": "unauthorized"}

@@ -1,0 +1,11 @@
+GET https://4to-vpn.xyz/
+Status: 307 | 0.688s
+
+--- REQUEST ---
+GET https://4to-vpn.xyz/
+Headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', 'Accept-Encoding': 'gzip, deflate', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Connection': 'keep-alive'}
+Body: 
+
+--- RESPONSE ---
+Headers: {'Date': 'Fri, 14 Aug 2026 11:41:22 GMT', 'Content-Type': 'text/plain; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'alt-svc': 'h3=":443"; ma=86400', 'location': '/ru', 'vary': 'Accept-Language', 'via': '1.1 Caddy', 'cf-cache-status': 'DYNAMIC', 'Nel': '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}', 'Server-Timing': 'cfCacheStatus;desc="DYNAMIC", cfEdge;dur=46,cfOrigin;dur=544', 'Report-To': '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=4jAepC%2BJ%2FvFDvwJJarZAbKoyC%2Fzxx4KoZP%2BkqmhQctHwLdy30U0AIZeyteDyCLlqjq0XTTIjapDgpj9XTw%2FOzKi%2BNe1b83aRV03Q0HG%2BTE8VCX5UjyLwHPRFL9KMbw%3D%3D"}]}', 'Server': 'cloudflare', 'CF-RAY': 'a2afb0a45fb2ad02-MSP'}
+Body: /ru

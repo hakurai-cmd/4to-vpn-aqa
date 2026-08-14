@@ -1,0 +1,1 @@
+[{"values":["https://4to-vpn.xyz"],"name":"Web.URL"},{"values":["https://sub.4t0-t0.xyz"],"name":"API.URL"},{"values":["https://sub.4t0-t0.xyz/miniapp/"],"name":"MiniApp.URL"},{"values":["firefox"],"name":"Web.Browser"},{"values":["True"],"name":"Headless"},{"values":["10"],"name":"Timeout"},{"values":["3.12.13"],"name":"Python"}]
