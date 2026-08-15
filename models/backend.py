@@ -32,6 +32,9 @@ class UserProfile(BaseModel):
     ru_traffic_limit: int = 10_737_418_240  # 10 GB RU-whitelist
     devices: list[Any] = []
     max_devices: int = 4
+    expires: str | None = None
+    locations: int = 0
+    servers: int = 0
 
 
 class AuthResponse(UserProfile):
@@ -39,11 +42,16 @@ class AuthResponse(UserProfile):
 
 
 class DeviceSubResponse(BaseModel):
-    """GET /api/device_sub/{uid}/{devNum} → {'url': 'vless://...'} ."""
+    """GET /api/device_sub/{uid}/{devNum} → подписочная ссылка устройства.
+
+    Поле 'url' — это https://..../sub/<token> ссылка подписки устройства
+    (открывается в клиенте Happ), НЕ сам vless://-ключ.
+    """
 
     model_config = ConfigDict(extra="allow")
 
     url: str = ""
+    device: Any = None
     error: str = ""
 
 

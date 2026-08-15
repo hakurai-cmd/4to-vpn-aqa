@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 import requests
 
 from config import config
@@ -43,7 +45,10 @@ class BackendApiClient:
         return f"{self.base_url}{path}"
 
     def _auth_query(self) -> str:
-        return f"?initdata={self.init_data}" if self.init_data else ""
+        # initData — это query-string-подобная строка (query_id=...&user=...&hash=...).
+        # Если подставить её в URL без кодирования, собственные '&' разобьют query
+        # на отдельные параметры и бэкенд получит обрезанный initdata → 403.
+        return f"?initdata={quote(self.init_data, safe='')}" if self.init_data else ""
 
     def _raise_for_status(self, response: requests.Response) -> None:
         if response.status_code >= 400:
