@@ -26,6 +26,8 @@
 | API-тесты лендинга | `requests` + `pytest` (параметризация, маркеры, фикстуры) |
 | Backend API-тесты | `requests` + `pydantic` (схемы ответов) + типизированный `BackendApiClient` |
 | UI-тесты | `selenium` (Firefox/Chrome), Page Object Model |
+| Авторизация | изолированная `authed_client`-фикстура, `initData`-секрет в `.env` (не в git/CI) |
+| Security/rate-limiting | `xfail`-документация дефектов, **санitизация секретов в Allure** перед публикацией |
 | Отчётность | `allure-pytest` (шаги, severity, скриншоты при падении, HTTP-лог) |
 | Линт/типы | `ruff` + `mypy`, `pre-commit` |
 | Покрытие | `pytest-cov` |
@@ -174,14 +176,14 @@ flowchart LR
   push --> lint[ruff + mypy]
   push --> api[pytest -m api]
   push --> backend[pytest -m backend]
-  push --> security[pytest -m security]
-  push --> ui[pytest -m ui+miniapp, headless]
-  lint --> dock[docker build]
-  api --> report[Allure generate]
-  backend --> report
-  security --> report
-  ui --> report
-  report --> pages((GitHub Pages))
+push --> security[pytest -m security]
+push --> ui[pytest -m ui+miniapp, headless]
+lint --> dock[docker build]
+api --> report[Allure generate]
+backend --> report
+security --> report
+ui --> report
+report --> pages((GitHub Pages))
 ```
 
 | Job | Что делает |
@@ -206,10 +208,11 @@ flowchart LR
 - [x] Backend API: типизированный клиент + pydantic-схемы (API discovery из Mini App)
 - [x] Unit-тесты клиента с моками (`responses`) — тест-пирамида
 - [x] Security-тесты: security-заголовки + брутфорс-защита (найденные дефекты — `xfail`)
-- [x] Allure (шаги, severity, скриншоты, HTTP-лог, env-виджет)
+- [x] IDOR-тесты: чужой uid Reject (403), защита подтверждена на live API
+- [x] Allure (шаги, severity, скриншоты, HTTP-лог, env-виджет, **санitизация секретов**)
 - [x] Линт/типы (ruff, mypy, pre-commit)
 - [x] CI/CD: GitHub Actions + Docker (Allure в GitHub Pages, live-бейджи)
-- [ ] Backend happy-path: реальная бизнес-логика по валидному `TELEGRAM_INIT_DATA`
+- [x] Backend happy-path: бизнес-флоу `auth → user → device_sub` на реальном `TELEGRAM_INIT_DATA`
 
 ## Лицензия
 
