@@ -5,7 +5,7 @@
 **Page Object**, отчётность **Allure**, статический анализ **ruff/mypy**.
 
 Проект заточен под реальный продукт (VPN-сервис с Telegram-ботом и Mini App),
-не под абстрактную песочницу — включая сетевые реалии (DPI-фильтрация контента).
+не под абстрактную песочницу — против реального продукта с Telegram-ботом и Mini App.
 
 ![python](https://img.shields.io/badge/python-3.12-blue?logo=python&logoColor=white)
 ![pytest](https://img.shields.io/badge/tests-pytest%208-0a7a8a?logo=pytest&logoColor=white)
