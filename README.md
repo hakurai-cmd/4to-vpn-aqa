@@ -162,9 +162,6 @@ mypy
 | `BROWSER` | `firefox` | `firefox` или `chrome` |
 | `HEADLESS` | `true` | Запуск браузера без GUI |
 
-> UI-тесты можно запускать офлайн по сохранённому снимку страницы:
-> `WEB_URL="file://$PWD/4to-vpn.xyz.html" MINIAPP_URL="file://$PWD/miniappTG.html" pytest -m "ui or miniapp"`.
-
 ## CI/CD
 
 Пайплайн `.github/workflows/tests.yml` — на каждый пуш, PR и ночной прогон (`0 3 * * *`).
