@@ -21,7 +21,7 @@ files = ["config.py", "conftest.py", "pages", "tests"]
 
 [tool.coverage.run]
 branch = true
-source = ["pages", "config"]
+source = ["clients", "models", "config"]
 
 [tool.coverage.report]
 show_missing = true

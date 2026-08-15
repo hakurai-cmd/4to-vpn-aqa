@@ -26,13 +26,31 @@ for _v in (
 
 MAX_BODY_LEN = 2000
 
+# Поля, которые маскируем в Allure HTTP-логах перед аттачем — чтобы в публичный
+# отчёт (GitHub Pages) не утекли Telegram initData, токены и кредиты прокси.
+# Это реальный security-фактор: Allure-артефакты деплоятся в Pages (публика).
+_SENSITIVE_VALUES: tuple[str, ...] = ()
+if config.TELEGRAM_INIT_DATA:
+    _SENSITIVE_VALUES += (config.TELEGRAM_INIT_DATA,)
+if config.PROXY_URL:
+    _SENSITIVE_VALUES += (config.PROXY_URL,)
+_REDACTED = "‹REDACTED›"
+
+
+def _redact(text: str) -> str:
+    """Подставляет REDACTED вместо любых известных секретных значений."""
+    for secret in _SENSITIVE_VALUES:
+        if secret and secret in text:
+            text = text.replace(secret, _REDACTED)
+    return text
+
 
 def _truncate(value: object, limit: int = MAX_BODY_LEN) -> str:
     """Обрезаем тело запроса/ответа, чтобы не тащить 224 КБ HTML в отчёт."""
     if not value:
         return ""
     text = value.decode("utf-8", "replace") if isinstance(value, bytes) else str(value)
-    return text[:limit] + ("…[truncated]" if len(text) > limit else "")
+    return _redact(text)[:limit] + ("…[truncated]" if len(text) > limit else "")
 
 
 def _attach_http_exchange(
@@ -40,15 +58,15 @@ def _attach_http_exchange(
 ) -> requests.Response:
     """Хук сессии requests: при каждом ответе аттачит curl-подобный лог в Allure.
 
-    Срабатывает только на успешно полученные ответы (на ReadTimeout не зайдёт —
-    там тест упадёт по исключению, что и так видно в отчёте).
+    Тела и URL санитизированы: initData/PROXY_URL/токены заменяются на REDACTED,
+    чтобы публичный отчёт (GitHub Pages) не раскрывал секреты.
     """
     req = response.request
     payload = (
         f"{req.method} {response.url}\n"
         f"Status: {response.status_code} | {response.elapsed.total_seconds():.3f}s\n\n"
         "--- REQUEST ---\n"
-        f"{req.method} {req.url}\n"
+        f"{req.method} {_redact(req.url or '')}\n"
         f"Headers: {dict(req.headers)}\n"
         f"Body: {_truncate(req.body)}\n\n"
         "--- RESPONSE ---\n"
