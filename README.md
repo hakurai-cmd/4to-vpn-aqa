@@ -154,16 +154,16 @@ mypy
 | Переменная | По умолчанию | Описание |
 |---|---|---|
 | `WEB_URL` | `https://4to-vpn.xyz` | Базовый URL лендинга |
+| `API_BASE_URL` | `https://sub.4t0-t0.xyz` | Базовый URL backend API |
+| `MINIAPP_URL` | `https://sub.4t0-t0.xyz/miniapp/` | URL Mini App страницы |
+| `TELEGRAM_INIT_DATA` | — | Telegram initData для happy-path (секрет, только `.env`) |
 | `TIMEOUT` | `10` | Таймаут запроса/ожидания, сек |
-| `PROXY_URL` | — | HTTPS-прокси (если SUT недоступен напрямую) |
+| `PROXY_URL` | — | HTTP(S)-прокси для API-запросов, если SUT недоступен напрямую |
 | `BROWSER` | `firefox` | `firefox` или `chrome` |
 | `HEADLESS` | `true` | Запуск браузера без GUI |
 
-> **Особенность окружения.** С машины разработчика (RU, без VPN) сайт
-> частично режется по SNI: заголовки и редиректы доходят, полное тело HTML —
-> нет. Поэтому для боевого прогона нужен `PROXY_URL` или системный VPN.
-> UI-тесты можно прогнать офлайн по сохранённому снимку страницы:
-> `WEB_URL="file://$PWD/4to-vpn.xyz.html" pytest -m ui`.
+> UI-тесты можно запускать офлайн по сохранённому снимку страницы:
+> `WEB_URL="file://$PWD/4to-vpn.xyz.html" MINIAPP_URL="file://$PWD/miniappTG.html" pytest -m "ui or miniapp"`.
 
 ## CI/CD
 
@@ -176,8 +176,8 @@ flowchart LR
   push --> lint[ruff + mypy]
   push --> api[pytest -m api]
   push --> backend[pytest -m backend]
-push --> security[pytest -m security]
-push --> ui[pytest -m ui+miniapp, headless]
+  push --> security[pytest -m security]
+  push --> ui[pytest -m ui+miniapp, headless]
 lint --> dock[docker build]
 api --> report[Allure generate]
 backend --> report
@@ -195,10 +195,6 @@ report --> pages((GitHub Pages))
 | `ui` | E2E на headless Firefox (браузер из образа runner'а), артефакт `allure-results-ui` |
 | `report` | Сливает артефакты, генерирует единый Allure-отчёт, деплоит в GH Pages (официальный `deploy-pages`) → `https://<owner>.github.io/<repo>/` |
 | `docker-build` | Проверяет сборку `Dockerfile` — портативность подтверждена на CI, а не «у меня работает» |
-
-> Для деплоя Allure в GH Pages на репозитории нужно включить **Settings → Pages →
-> Source: GitHub Actions**. SUT при запусках из GitHub runner'а (US/EU) доступен
-> без прокси — DPI-фильтрация, влияющая на локальные прогоны, в CI не проявляется.
 
 ## Roadmap
 
