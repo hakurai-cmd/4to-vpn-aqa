@@ -27,7 +27,7 @@
 | Backend API-тесты | `requests` + `pydantic` (схемы ответов) + типизированный `BackendApiClient` |
 | UI-тесты | `selenium` (Firefox/Chrome), Page Object Model |
 | Авторизация | изолированная `authed_client`-фикстура, `initData`-секрет в `.env` (не в git/CI) |
-| Security/rate-limiting | `xfail`-документация дефектов, **санitизация секретов в Allure** перед публикацией |
+| Security/rate-limiting | `xfail`-документация дефектов, **санитизация секретов в Allure** перед публикацией |
 | Отчётность | `allure-pytest` (шаги, severity, скриншоты при падении, HTTP-лог) |
 | Линт/типы | `ruff` + `mypy`, `pre-commit` |
 | Покрытие | `pytest-cov` |
@@ -202,7 +202,7 @@ report --> pages((GitHub Pages))
 - [x] Unit-тесты клиента с моками (`responses`) — тест-пирамида
 - [x] Security-тесты: security-заголовки + брутфорс-защита (найденные дефекты — `xfail`)
 - [x] IDOR-тесты: чужой uid Reject (403), защита подтверждена на live API
-- [x] Allure (шаги, severity, скриншоты, HTTP-лог, env-виджет, **санitизация секретов**)
+- [x] Allure (шаги, severity, скриншоты, HTTP-лог, env-виджет, **санитизация секретов**)
 - [x] Линт/типы (ruff, mypy, pre-commit)
 - [x] CI/CD: GitHub Actions + Docker (Allure в GitHub Pages, live-бейджи)
 - [x] Backend happy-path: бизнес-флоу `auth → user → device_sub` на реальном `TELEGRAM_INIT_DATA`
